@@ -10,12 +10,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Form, Formik } from "formik";
 import { TextField } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import * as yup from "yup";
 
-const loginSchema = {};
+const loginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Please Enter a valid email")
+    .required("Please Enter an email"),
+  password: yup
+    .string()
+    .required("Please Enter a password")
+    .min(8, "Password must have min 8 character")
+    .max(16, "Password must have max 16 character")
+    .matches(/\d+/, "Password must have a number")
+    .matches(/[a-z]+/, "Password must have a lowercase")
+    .matches(/[A-Z]+/, "Password must have a uppercase")
+    .matches(/[!,?{}><%&$#£+-.]+/, " Password must have a special char"),
+});
 
 const Login = () => {
   const navigate = useNavigate();
-  const { currentUser, error } = useSelector((state) => state?.auth);
+  const { currentUser, error, loading } = useSelector((state) => state?.auth);
 
   return (
     <Container maxWidth="lg">
@@ -97,6 +113,14 @@ const Login = () => {
                     error={touched.password && Boolean(errors.password)}
                     helperText={touched.password && errors.password}
                   />
+                  <LoadingButton
+                    type="submit"
+                    loading={loading}
+                    loadingPosition="center"
+                    variant="contained"
+                  >
+                    Submit
+                  </LoadingButton>
                 </Box>
               </Form>
             )}
