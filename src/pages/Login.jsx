@@ -12,7 +12,7 @@ import { Form, Formik } from "formik";
 import { TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import * as yup from "yup";
-import { login } from "../hooks/useAuthCalls";
+import useAuthCalls from "../hooks/useAuthCalls";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -33,7 +33,7 @@ const loginSchema = yup.object().shape({
 const Login = () => {
   const navigate = useNavigate();
   const { currentUser, error, loading } = useSelector((state) => state?.auth);
-
+  const { login } = useAuthCalls();
   return (
     <Container maxWidth="lg">
       <Grid
